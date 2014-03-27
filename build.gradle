@@ -26,9 +26,11 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    release {
-        runProguard false
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
     }
 
     // workaround for "duplicate files during packaging of APK" issue
@@ -47,13 +49,13 @@ dependencies {
 
     // this library is only needed by test code (95% certain), and therefore
     // instrumentTestCompile is used rather than compile.
-    instrumentTestCompile 'commons-io:commons-io:2.0.1'
+    androidTestCompile 'commons-io:commons-io:2.0.1'
 
     // as discovered by trial and error, the build will fail if "compile" is
     // used: Error: duplicate files during packaging of APK.  I guess it is
     // being implicitly included by being in the libs folder, and then "double included"
     // because of a "compile" directive to explicitly include the jar.
-    instrumentTestCompile fileTree(dir: 'libs', include: 'td_collator_so.jar')
+    androidTestCompile fileTree(dir: 'libs', include: 'td_collator_so.jar')
 
     compile buildAndroidWithArtifacts == null ?
             project(':libraries:couchbase-lite-java-core') :
