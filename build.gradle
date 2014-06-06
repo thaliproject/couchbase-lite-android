@@ -66,7 +66,10 @@ dependencies {
     // see https://github.com/couchbase/couchbase-lite-android/pull/300
     androidTestCompile buildAndroidWithArtifacts == null ?
             project(':libraries:couchbase-lite-java-listener') :
-            'com.couchbase.lite:java-listener:' + System.getenv("MAVEN_UPLOAD_VERSION") 
+            'com.couchbase.lite:java-listener:' + System.getenv("MAVEN_UPLOAD_VERSION")
+
+    androidTestCompile 'com.squareup.okhttp:mockwebserver:1.2.1'
+
 }
 
 
