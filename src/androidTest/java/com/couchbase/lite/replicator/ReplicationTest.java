@@ -1287,6 +1287,8 @@ public class ReplicationTest extends LiteTestCase {
      * - Do pull replication
      * - Assert conflict is resolved locally
      *
+     * https://github.com/couchbase/couchbase-lite-java-core/issues/77
+     *
      */
     public void testRemoteConflictResolution() throws Exception {
 
@@ -3062,6 +3064,43 @@ public class ReplicationTest extends LiteTestCase {
 
         server.shutdown();
 
+
+    }
+
+
+    /**
+     * Verify that Validation based Rejects revert the entire batch that the document is in
+     * even if one of the documents fail the validation.
+     *
+     * @throws Exception
+     */
+    public void testVerifyPullerInsertsDocsWithValidation() throws Exception {
+
+        // create mockwebserver and custom dispatcher
+        MockDispatcher dispatcher = new MockDispatcher();
+        MockWebServer server = MockHelper.getPreloadedPullTargetMockCouchDB(dispatcher, 2, 2);
+        server.play();
+
+        // Setup validation to reject document with id: doc1
+        database.setValidation("validateOnlyDoc1", new Validator() {
+            @Override
+            public void validate(Revision newRevision, ValidationContext context) {
+                if ("doc1".equals(newRevision.getDocument().getId())) {
+                    context.reject();
+                }
+            }
+        });
+
+        // run pull replication
+        Replication pullReplication = database.createPullReplication(server.getUrl("/db"));
+        runReplication(pullReplication);
+
+        assertNotNull(database);
+        // doc1 should not be in the store because of validation
+        assertNull(database.getExistingDocument("doc1"));
+
+        // doc0 should be in the store, but it wont be because of the bug.
+        assertNotNull(database.getExistingDocument("doc0"));
 
     }
 

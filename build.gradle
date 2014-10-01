@@ -68,7 +68,7 @@ dependencies {
             project(':libraries:couchbase-lite-java-core') :
             'com.couchbase.lite:couchbase-lite-java-core:' + System.getProperty("MAVEN_UPLOAD_VERSION") // https://github.com/couchbase/couchbase-lite-android/issues/238
 
-    androidTestCompile 'com.squareup.okhttp:mockwebserver:1.3.0'
+    androidTestCompile 'com.squareup.okhttp:mockwebserver:2.0.0'
 
 }
 
