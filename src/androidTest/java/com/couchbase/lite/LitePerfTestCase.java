@@ -53,10 +53,10 @@ public abstract class LitePerfTestCase extends LiteTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        Log.v(TAG, "setUp in LitePerfTestCase");
-        //super.setUp();
-        loadConfigs();
-        runMultiple();
+//        Log.v(TAG, "setUp in LitePerfTestCase");
+//        //super.setUp();
+//        loadConfigs();
+//        runMultiple();
     }
 
     public double runOne(int numberOfDocuments, int sizeOfDocuments)  throws Exception {
